@@ -1,0 +1,124 @@
+ <!DOCTYPE html>
+<html lang="de" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<head>
+<meta charset="utf-8">
+<script src="bimono.js"></script>
+<script type="text/javascript">
+	function clearfields() {
+		var title = document.getElementById("title");
+		var message = document.getElementById("message");
+		var key = document.getElementById("key");
+		var responseMessageBox = document.getElementById("responseMessageBox");
+		
+		title.value = "";
+		message.value = "";
+		key.value = "";
+		responseMessageBox.innerText = "";
+	}
+	
+	function notify() {
+		var title = document.getElementById("title");
+		var message = document.getElementById("message");
+		var key = document.getElementById("key");
+		var responseMessageBox = document.getElementById("responseMessageBox");
+		var stl = responseMessageBox.style;
+		
+		responseMessageBox.innerText = "";
+		stl.color = "red";
+		
+		if(title.value.trim() == "") {
+			responseMessageBox.innerText = "Bitte einen Titel angeben";
+		} else if(message.value.trim() == "") {
+			responseMessageBox.innerText = "Bitte eine Nachricht angeben";
+		} else if(key.value.trim() == "") {
+			responseMessageBox.innerText = "Bitte die Athentifizierung angeben";
+		} else {
+			sendNotification(title.value, message.value, key.value, callback);
+		}
+	}
+	
+	function callback(xhr) {
+		if (xhr.readyState == 4) {
+			var responseMessageBox = document.getElementById("responseMessageBox");
+			var stl = responseMessageBox.style;
+			if(xhr.status == 200) {
+				stl.color = "grey";
+				responseMessageBox.innerText = "Nachricht wurde erfolgreich versendet";
+			} else {
+				stl.color = "red";
+				responseMessageBox.innerText = "Nachricht konnte nicht versendet werden. Statuscode: " + xhr.status;
+			}
+		}
+	}
+</script>
+<link rel="shortcut icon" href="https://bimono.de/media/unknown/d9/0c/f4/favicon.ico" />
+<title>bimono.de | Administration</title>
+<style>
+   input[type="text"] {
+         width: 30em;
+         margin-left: 2em;
+   }
+   
+   body {
+		width: 40%;
+        margin-left:auto;
+        margin-right:auto;
+		text-align: center;
+   }
+</style>
+</head>
+<body>
+        <table cellpadding="0" >
+                <tr>
+                   <td style="text-align: left" >
+                         <!--<div>
+                                 <button><span>Bild</span></ button>
+                         </div>
+                         <hr size="1" noshade>-->
+                         <div >
+                                 <img src="res/bimono.png" width="200em" />
+                         </div>
+                   </td>
+                   <td style="text-align: left">
+                      <table>
+                         <tr>
+                                 <td><input id="title" type="text" placeholder="&Uuml;berschrift"/></td>
+                         </tr>
+                         <tr>
+                                 <td><input id="key" type="text" placeholder="Authentifizierung"/></td>
+                         </tr>
+                         <tr>
+                                 <!--<td><input name="price" type="text" style="width: 20%" placeholder="Preis"/></td>-->
+                         </tr>
+                      </table>
+                   </td>
+                </tr>
+                <tr>
+                        <td colspan="2" style="text-align: left">
+                                <textarea style="resize: none; width: 47.95em" id="message" maxlength="160" placeholder="Nachricht" ></textarea>
+                        </td>
+                </tr>
+                <tr>
+						<td colspan="2" style="width: 100%">
+							<table cellpadding="0" cellspacing="0" style="width: 100%">
+								<tr>
+									<td>
+										<div id="responseMessageBox" style="text-align: left"></div>
+									</td>
+									<td style="text-align:right; width: 12em">
+										<div style="flow: left" >
+											<button onclick="javascript:clearfields()" title="Cancel">
+												<span>Abbrechen</span>
+											</button>
+											<button onclick="javascript:notify()" title="Notify">
+												<span>Senden</span>
+											</button>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+                </tr>
+        </table>
+</body>
+</html>
